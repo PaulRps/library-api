@@ -83,7 +83,7 @@
           "201": {
             "description": "successful operation",
             "schema": {
-              "type": "string",
+              "type": "long",
               "example": "id"
             }
           }

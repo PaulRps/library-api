@@ -22,7 +22,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBookById(@PathVariable int id){
+    public ResponseEntity<BookDTO> getBookById(@PathVariable long id){
         BookDTO book = books.stream()
                 .filter(b -> b.getId() == id)
                 .findFirst()
@@ -34,17 +34,17 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> addBook(@RequestBody AddBookDTO newBookDTO){
-        int newId = books.size() + 1;
+    public ResponseEntity<Long> addBook(@RequestBody AddBookDTO newBookDTO){
+        long newId = books.size() + 1;
         BookDTO book= new BookDTO();
         book.setId(newId);
         book.setName(newBookDTO.getName());
         books.add(book);
-        return ResponseEntity.status(201).body(book);
+        return ResponseEntity.status(201).body(newId);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable int id, @RequestBody BookDTO bookDTO){
+    public ResponseEntity<BookDTO> updateBook(@PathVariable long id, @RequestBody BookDTO bookDTO){
         BookDTO existingBook = books.stream()
                 .filter(b -> b.getId() == id)
                 .findFirst()
@@ -57,7 +57,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDTO> deleteBook(@PathVariable int id){
+    public ResponseEntity<BookDTO> deleteBook(@PathVariable long id){
         boolean removed = books.removeIf(book -> book.getId() == id);
         if (!removed){
             return ResponseEntity.notFound().build();
