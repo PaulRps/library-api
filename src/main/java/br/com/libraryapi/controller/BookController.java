@@ -1,6 +1,7 @@
 package br.com.libraryapi.controller;
 
 
+import br.com.libraryapi.dto.AddBookDTO;
 import br.com.libraryapi.dto.BookDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,13 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO newBook){
-        books.add(newBook);
-        return ResponseEntity.status(201).body(newBook);
+    public ResponseEntity<BookDTO> addBook(@RequestBody AddBookDTO newBookDTO){
+        int newId = books.size() + 1;
+        BookDTO book= new BookDTO();
+        book.setId(newId);
+        book.setName(newBookDTO.getName());
+        books.add(book);
+        return ResponseEntity.status(201).body(book);
     }
 
     @PutMapping("/{id}")
@@ -51,7 +56,7 @@ public class BookController {
         return ResponseEntity.ok(existingBook);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<BookDTO> deleteBook(@PathVariable int id){
         boolean removed = books.removeIf(book -> book.getId() == id);
         if (!removed){
